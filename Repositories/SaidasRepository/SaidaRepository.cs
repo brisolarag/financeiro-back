@@ -10,7 +10,6 @@ namespace financeiro_back.Repositories.SaidasRepository;
 public class SaidaRepository : ISaidaRepository
 {
     private readonly FinanceiroContext _context;
-    private NotFoundException saidaNaoEncontrada = new NotFoundException("Não foi possivel encontrar a saida");
 
     public SaidaRepository(FinanceiroContext context) => this._context = context;
     
@@ -52,33 +51,44 @@ public class SaidaRepository : ISaidaRepository
         return newSaida;
     }
 
-    public Task<Saida> DeleteAsync(Guid id)
+    public async Task<Saida> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var deletar = await GetAsync(id);
+        VerificarSeEntidadeNaoEncontrada(deletar);
+
+        _context.Saidas.Remove(deletar!);
+        await _context.SaveChangesAsync();
+        return deletar!;
     }
 
 
     public async Task<Saida> EditAsync(Guid id, SaidaRequestEdit request)
     {
         var toEdit = await GetAsync(id);
-        if (toEdit is null)
-            throw saidaNaoEncontrada;
+        VerificarSeEntidadeNaoEncontrada(toEdit);
+        AlteraSeModificado(toEdit!, request);
         
-        AlteraSeModificado(toEdit, request);
-
         try
         {
-            _context.Saidas.Update(toEdit);
+            _context.Saidas.Update(toEdit!);
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         { throw new DbUpdateException("Não foi possivel modificar a entidade", ex); }
         
         
-        return toEdit;
+        return toEdit!;
     }
 
 
+    // verificadores:
+    private void VerificarSeEntidadeNaoEncontrada(Saida? entidade)
+    {
+        if (entidade == null)
+        {
+            throw new NotFoundException("Não foi possível encontrar a saída.");
+        }
+    }
     private void AlteraSeModificado(Saida entidade, SaidaRequestEdit request)
     {
         try

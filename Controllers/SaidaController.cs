@@ -1,6 +1,5 @@
 ﻿using financeiro_back.Models.Saidas;
 using financeiro_back.Repositories.SaidasRepository;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace financeiro_back.Controllers;
@@ -16,6 +15,7 @@ public class SaidaController : ControllerBase
         this._service = service;
     }
 
+    #region GET: /saida => retorna todos
     [HttpGet]
     public async Task<ActionResult<List<Saida>>> Get()
     {
@@ -37,7 +37,9 @@ public class SaidaController : ControllerBase
             });
         }
     }
+    #endregion
     
+    #region GET: /saida/{id} => retorna saida com id
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<List<Saida?>>> Get(Guid id)
     {
@@ -66,9 +68,9 @@ public class SaidaController : ControllerBase
             });
         }
     }
+    #endregion
     
-
-
+    #region POST: /saida => criar nova saida
     [HttpPost]
     public async Task<ActionResult<Saida>> Create([FromBody] SaidaRequest request)
     {
@@ -91,7 +93,9 @@ public class SaidaController : ControllerBase
             });
         }
     }
+    #endregion
 
+    #region PUT: /saida => editar saida
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<Saida>> Edit(Guid id, SaidaRequestEdit request)
     {
@@ -114,4 +118,30 @@ public class SaidaController : ControllerBase
             });
         }
     }
+    #endregion
+    
+    #region DELETE: /saida/{id} => editar saida
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<Saida>> Deletar(Guid id)
+    {
+        try
+        {
+            var deletar = await _service.DeleteAsync(id);
+            return Ok(new
+            {
+                error = false,
+                msg = "Saida deletada com sucesso",
+                data = deletar
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                error = true,
+                msg = ex.Message
+            });
+        }
+    }
+    #endregion
 }
