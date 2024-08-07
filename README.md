@@ -12,8 +12,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/brisolarag/financeiro-back">
+    <img src="https://http2.mlstatic.com/D_NQ_NP_900912-MLB48372399747_112021-O.webp" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Financeiro Backend</h3>
@@ -34,39 +34,30 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
 
 
 <!-- ABOUT THE PROJECT -->
 ## Api usage
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
+### Entries endpoints
+```
+Entrada is an entry operation in Portuguese
+```
+| Endpoint                                                               |  Type  |                                                                                             About |
+|:-----------------------------------------------------------------------|:------:|--------------------------------------------------------------------------------------------------:|
+| /Entrada                                                               |  GET   |                                                                       Get all  entries operations |
+| /Entrada/ <span style="color:yellow; font-weight:bolder">{ id }</span> |  GET   |                                                  Get an entry operation passing the id in the URL |
+| /Entrada/ <span style="color:yellow; font-weight:bolder">{ id }</span> |  PUT   | Edit some entry property by calling the id in the URL and passing the property change in the body |
+| /Entrada/ <span style="color:yellow; font-weight:bolder">{ id }</span> | DELETE |                                           Delete any entry operation by passing the id in the URL |
+### Outs endpoints
+```
+Saida is an out operation in Portuguese
+```
+| Endpoint                                                             |  Type  |                                                                                             About |
+|:---------------------------------------------------------------------|:------:|--------------------------------------------------------------------------------------------------:|
+| /Saida                                                               |  GET   |                                                                           Get all outs operations |
+| /Saida/ <span style="color:yellow; font-weight:bolder">{ id }</span> |  GET   |                                                    Get an out operation passing the id in the URL |
+| /Saida/ <span style="color:yellow; font-weight:bolder">{ id }</span> |  PUT   | Edit some entry property by calling the id in the URL and passing the property change in the body |
+| /Saida/ <span style="color:yellow; font-weight:bolder">{ id }</span> | DELETE |                                             Delete any out operation by passing the id in the URL |
 Using this API, you're able to create new entries and outs, and consume the api using views to create a consistent app. Here is also the api documentation to consume the endpoints.
 
 Here's what you can do:
