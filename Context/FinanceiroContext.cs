@@ -1,6 +1,5 @@
 ﻿using financeiro_back.Models;
 using Microsoft.EntityFrameworkCore;
-using financeiro_back.Models;
 using financeiro_back.Models.Saidas;
 using financeiro_back.Models.Entradas;
 

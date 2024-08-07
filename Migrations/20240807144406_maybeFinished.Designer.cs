@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using financeiro_back.Context;
 
@@ -10,9 +11,11 @@ using financeiro_back.Context;
 namespace financeiro_back.Migrations
 {
     [DbContext(typeof(FinanceiroContext))]
-    partial class FinanceiroContextModelSnapshot : ModelSnapshot
+    [Migration("20240807144406_maybeFinished")]
+    partial class maybeFinished
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");

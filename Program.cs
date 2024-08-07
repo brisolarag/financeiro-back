@@ -1,4 +1,5 @@
 using financeiro_back.Context;
+using financeiro_back.Repositories.SaidasRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<FinanceiroContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<ISaidaRepository, SaidaRepository>();
 
 var app = builder.Build();
 

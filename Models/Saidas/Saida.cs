@@ -2,18 +2,19 @@
 
 public class Saida : Operacao
 {
-    public string Descricao { get; set; } = null!;
+    public string Descricao { get; set; } 
     public bool isFatura { get; set; }
+
+    public Saida() { }
+    public Saida(DateTime data, double valor, string desc, bool isFatura) 
+        : base(data, valor)
+    {
+        this.Descricao = desc;
+        this.isFatura = isFatura;
+    }
 
     public static Saida NovaFatura(DateTime data, double valor, string descricao)
     {
-        return new Saida
-        {
-            Id = Guid.NewGuid(),
-            Data = data,
-            Valor = valor,
-            Descricao = descricao,
-            isFatura = true
-        };
+        return new Saida(data, valor, descricao, true);
     }
 }
