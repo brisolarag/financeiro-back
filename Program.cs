@@ -1,4 +1,5 @@
 using financeiro_back.Context;
+using financeiro_back.Repositories.EntradasRepository;
 using financeiro_back.Repositories.SaidasRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ISaidaRepository, SaidaRepository>();
+builder.Services.AddScoped<IEntradaRepository, EntradaRepository>();
 
 var app = builder.Build();
 
