@@ -15,22 +15,20 @@ public class EntradaRepository : IEntradaRepository
     public EntradaRepository(FinanceiroContext context) => this._context = context;
     
     
-    public async Task<List<Entrada>> GetAsync()
+    public async Task<List<Entrada>> GetAsync
+        (Guid? id, string? de_quem)
     {
-        return await _context.Entradas.ToListAsync();
-    }
+        var query = _context.Entradas.AsQueryable();
+        // se tiver id na pesquisa ignora o resto e pesquisa o id
+        if (id.HasValue)
+            return await query.Where(entrada => entrada.Id == id).ToListAsync();
+        
+        // filtra de_quem
+        if (!(string.IsNullOrEmpty(de_quem)))
+            query = query.Where(entrada => entrada.DeQuem.Contains(de_quem));
+        
 
-    public Task<Entrada?> GetAsync(Guid id)
-    {
-        try
-        {
-            var entrada = _context.Entradas.SingleOrDefaultAsync(saida => saida.Id == id);
-            return entrada;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Ocorreu um erro inesperado", ex);
-        }
+        return await query.ToListAsync();
     }
 
     public async Task<Entrada> CreateAsync(EntradaRequest request)
@@ -82,6 +80,20 @@ public class EntradaRepository : IEntradaRepository
     }
 
 
+    
+    
+    private Task<Entrada?> GetAsync(Guid id)
+    {
+        try
+        {
+            var entrada = _context.Entradas.SingleOrDefaultAsync(saida => saida.Id == id);
+            return entrada;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu um erro inesperado", ex);
+        }
+    }
     // verificadores:
     private void VerificarSeEntidadeNaoEncontrada(Entrada? entidade)
     {
