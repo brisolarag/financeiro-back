@@ -21,7 +21,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISaidaRepository, SaidaRepository>();
 builder.Services.AddScoped<IEntradaRepository, EntradaRepository>();
 
+builder.Services.AddCors(options => {
+  options.AddPolicy("Free", policy => {
+    policy.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+  });
+});
+
 var app = builder.Build();
+app.UseCors("Free");
 
 if (app.Environment.IsDevelopment())
 {
