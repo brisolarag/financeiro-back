@@ -16,11 +16,13 @@ public class EntradaController : ControllerBase
 
     #region GET: /entrada => retorna todos
     [HttpGet]
-    public async Task<ActionResult<List<Entrada>>> Get()
+    public async Task<ActionResult<List<Entrada>>> Get(Guid? id, string? de_quem)
     {
         try
         {
-            var entradas = await _service.GetAsync();
+            var entradas = await _service.GetAsync(id, de_quem);
+            if (!(entradas.Any()))
+                return NoContent();
             return Ok(new
             {
                 error = false,
@@ -38,36 +40,7 @@ public class EntradaController : ControllerBase
     }
     #endregion
     
-    #region GET: /entrada/{id} => retorna entrada com id
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<List<Entrada?>>> Get(Guid id)
-    {
-        try
-        {
-            var entrada = await _service.GetAsync(id);
-            if (entrada is null)
-                return NotFound(new
-                {
-                    error = true,
-                    msg = "Nenhuma entrada com esse id encontrada"
-                });
-                
-            return Ok(new
-            {
-                error = false,
-                data = entrada
-            });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new
-            {
-                error = true,
-                msg = ex.Message
-            });
-        }
-    }
-    #endregion
+
     
     #region POST: /entrada => criar nova entrada
     [HttpPost]

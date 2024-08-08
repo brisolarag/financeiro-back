@@ -17,46 +17,17 @@ public class SaidaController : ControllerBase
 
     #region GET: /saida => retorna todos
     [HttpGet]
-    public async Task<ActionResult<List<Saida>>> Get()
+    public async Task<ActionResult<List<Saida>>> Get(Guid? id, string? descricao, bool? is_fatura, bool? pago)
     {
         try
         {
-            var saidas = await _service.GetAsync();
+            var saidas = await _service.GetAsync(id, descricao, is_fatura, pago);
+            if (!(saidas.Any()))
+                return NoContent();
             return Ok(new
             {
                 error = false,
                 data = saidas
-            });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new
-            {
-                error = true,
-                msg = ex.Message
-            });
-        }
-    }
-    #endregion
-    
-    #region GET: /saida/{id} => retorna saida com id
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<List<Saida?>>> Get(Guid id)
-    {
-        try
-        {
-            var saida = await _service.GetAsync(id);
-            if (saida is null)
-                return NotFound(new
-                {
-                    error = true,
-                    msg = "Nenhuma saida com esse id encontrada"
-                });
-                
-            return Ok(new
-            {
-                error = false,
-                data = saida
             });
         }
         catch (Exception ex)
