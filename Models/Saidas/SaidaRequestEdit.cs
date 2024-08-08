@@ -12,4 +12,6 @@ public class SaidaRequestEdit
     public string? Descricao { get; set; }
 
     public bool? isFatura { get; set; }
+
+    public bool? Pago { get; set; }
 }

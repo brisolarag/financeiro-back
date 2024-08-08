@@ -1,8 +1,6 @@
 ﻿using financeiro_back.Context;
 using financeiro_back.Erros;
 using financeiro_back.Models.Saidas;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace financeiro_back.Repositories.SaidasRepository;
@@ -14,22 +12,27 @@ public class SaidaRepository : ISaidaRepository
     public SaidaRepository(FinanceiroContext context) => this._context = context;
     
     
-    public async Task<List<Saida>> GetAsync()
+    public async Task<List<Saida>> GetAsync
+    (Guid? id, string? descricao, bool? is_fatura, bool? pago)
     {
-        return await _context.Saidas.ToListAsync();
-    }
+        var query = _context.Saidas.AsQueryable();
+        // se tiver id na pesquisa ignora o resto e pesquisa o id
+        if (id.HasValue)
+            return await query.Where(saida => saida.Id == id).ToListAsync();
+        
+        // filtra descricao
+        if (!(string.IsNullOrEmpty(descricao)))
+            query = query.Where(saida => saida.Descricao.Contains(descricao));
+        
+        // filtra fatura
+        if (is_fatura.HasValue)
+            query = query.Where(saida => saida.isFatura == is_fatura);
 
-    public Task<Saida?> GetAsync(Guid id)
-    {
-        try
-        {
-            var saida = _context.Saidas.SingleOrDefaultAsync(saida => saida.Id == id);
-            return saida;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Ocorreu um erro inesperado", ex);
-        }
+        // filtra se pago
+        if (pago.HasValue)
+            query = query.Where(saida => saida.Pago == pago);
+
+        return await query.ToListAsync();
     }
 
     public async Task<Saida> CreateAsync(SaidaRequest request)
@@ -79,8 +82,22 @@ public class SaidaRepository : ISaidaRepository
         
         return toEdit!;
     }
-
-
+    
+    
+    
+    private Task<Saida?> GetAsync(Guid id)
+    {
+        try
+        {
+            var saida = _context.Saidas.SingleOrDefaultAsync(saida => saida.Id == id);
+            return saida;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu um erro inesperado", ex);
+        }
+    }
+    
     // verificadores:
     private void VerificarSeEntidadeNaoEncontrada(Saida? entidade)
     {
@@ -104,6 +121,9 @@ public class SaidaRepository : ISaidaRepository
 
             if (request.isFatura.HasValue)
                 entidade.isFatura = request.isFatura.Value;
+            
+            if (request.Pago.HasValue)
+                entidade.Pago = request.Pago.Value;
         }
         catch (Exception ex)
         {

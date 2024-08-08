@@ -17,12 +17,15 @@ public class SaidaRequest
     [Required]
     public bool isFatura { get; set; }
 
+    [Required]
+    public bool Pago { get; set; }
+
 
     public Saida? Parse()
     {
         try
         {
-            return new Saida(this.Data, this.Valor, this.Descricao, this.isFatura);
+            return new Saida(this.Data, this.Valor, this.Descricao, this.isFatura, this.Pago);
         }
         catch (Exception ex)
         {
