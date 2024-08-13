@@ -103,10 +103,12 @@ public class SaidaRepository : ISaidaRepository
 
         if (referencia.HasValue)
         {
-            query = query.Where(saida =>
-                saida.Descricao.ToLower().Contains("nubank")
-                    ? saida.Data.Month == referencia.Value.AddMonths(1).Month
-                    : saida.Data.Month == referencia.Value.Month);
+            query = query
+                .Where(saida =>
+                    saida.Descricao.ToLower().Contains("nubank")
+                        ? saida.Data.Month == referencia.Value.AddMonths(1).Month
+                        : saida.Data.Month == referencia.Value.Month)
+                .Where(saida => saida.Data.Year == referencia.Value.Year);
         }
 
         return query;
