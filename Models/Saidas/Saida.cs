@@ -4,10 +4,10 @@ public class Saida : Operacao
 {
     public string Descricao { get; set; } 
     public bool isFatura { get; set; }
-    public bool Pago { get; set; }
+    public DateTime? Pagamento { get; set; }
 
     public Saida() { }
-    public Saida(DateTime data, double valor, string desc, bool isFatura, bool pago) 
+    public Saida(DateTime data, double valor, string desc, bool isFatura, DateTime? pagamento) 
         : base(data, valor)
     {
         this.isFatura = isFatura;
@@ -17,11 +17,12 @@ public class Saida : Operacao
         else
             this.Descricao = desc;
         
-        this.Pago = pago;
+        if (pagamento.HasValue)
+            this.Pagamento = pagamento;
     }
 
-    public static Saida NovaFatura(DateTime data, double valor, string descricao, bool pago)
+    public static Saida NovaFatura(DateTime data, double valor, string descricao, DateTime pagamento)
     {
-        return new Saida(data, valor, descricao, true, pago);
+        return new Saida(data, valor, descricao, true, pagamento);
     }
 }

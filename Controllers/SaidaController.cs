@@ -17,11 +17,11 @@ public class SaidaController : ControllerBase
 
     #region GET: /saida => retorna todos
     [HttpGet]
-    public async Task<ActionResult<List<Saida>>> Get(Guid? id, string? descricao, bool? is_fatura, bool? pago)
+    public async Task<ActionResult<List<Saida>>> Get(Guid? id, string? descricao, bool? is_fatura, bool? pago, DateTime? referencia)
     {
         try
         {
-            var saidas = await _service.GetAsync(id, descricao, is_fatura, pago);
+            var saidas = await _service.GetAsync(id, descricao, is_fatura, pago, referencia);
             if (!(saidas.Any()))
                 return NoContent();
             return Ok(new

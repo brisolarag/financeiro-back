@@ -13,24 +13,11 @@ public class SaidaRepository : ISaidaRepository
     
     
     public async Task<List<Saida>> GetAsync
-    (Guid? id, string? descricao, bool? is_fatura, bool? pago)
+    (Guid? id, string? descricao, bool? is_fatura, bool? pago, DateTime? referencia)
     {
         var query = _context.Saidas.AsQueryable();
         // se tiver id na pesquisa ignora o resto e pesquisa o id
-        if (id.HasValue)
-            return await query.Where(saida => saida.Id == id).ToListAsync();
-        
-        // filtra descricao
-        if (!(string.IsNullOrEmpty(descricao)))
-            query = query.Where(saida => saida.Descricao.Contains(descricao));
-        
-        // filtra fatura
-        if (is_fatura.HasValue)
-            query = query.Where(saida => saida.isFatura == is_fatura);
-
-        // filtra se pago
-        if (pago.HasValue)
-            query = query.Where(saida => saida.Pago == pago);
+        query = Verificadores(query, descricao, is_fatura, pago, referencia);
 
         return await query.ToListAsync();
     }
@@ -98,6 +85,33 @@ public class SaidaRepository : ISaidaRepository
         }
     }
     
+    private IQueryable<Saida> Verificadores(IQueryable<Saida> query, string? descricao, bool? is_fatura, bool? pago, DateTime? referencia)
+    {
+        
+        // filtra descricao
+        if (!(string.IsNullOrEmpty(descricao)))
+            query = query.Where(saida => saida.Descricao.Contains(descricao));
+        
+        // filtra fatura
+        if (is_fatura.HasValue)
+            query = query.Where(saida => saida.isFatura == is_fatura);
+
+        // filtra se pago
+        if (pago.HasValue)
+            query = query.Where(saida => saida.Pagamento != null);
+
+
+        if (referencia.HasValue)
+        {
+            query = query.Where(saida =>
+                saida.Descricao.ToLower().Contains("nubank")
+                    ? saida.Data.Month == referencia.Value.AddMonths(1).Month
+                    : saida.Data.Month == referencia.Value.Month);
+        }
+
+        return query;
+    }
+    
     // verificadores:
     private void VerificarSeEntidadeNaoEncontrada(Saida? entidade)
     {
@@ -122,12 +136,13 @@ public class SaidaRepository : ISaidaRepository
             if (request.isFatura.HasValue)
                 entidade.isFatura = request.isFatura.Value;
             
-            if (request.Pago.HasValue)
-                entidade.Pago = request.Pago.Value;
+            if (request.Pagamento.HasValue)
+                entidade.Pagamento = request.Pagamento.Value;
         }
         catch (Exception ex)
         {
             throw new DbUpdateException("Não foi possivel modificar a entidade", ex);
         }
     }
+
 }

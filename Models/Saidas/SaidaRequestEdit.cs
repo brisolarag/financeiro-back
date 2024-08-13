@@ -13,5 +13,5 @@ public class SaidaRequestEdit
 
     public bool? isFatura { get; set; }
 
-    public bool? Pago { get; set; }
+    public DateTime? Pagamento { get; set; }
 }
